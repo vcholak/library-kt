@@ -11,7 +11,7 @@ import org.ruthenia.itc.models.Books
 import org.ruthenia.itc.models.Genres
 
 object DatabaseSingleton {
-    fun init() {
+    fun configureDatabase() {
         val driverClassName = "org.postgresql.Driver"
         val jdbcURL = "jdbc:postgresql://localhost:5432/postgres"
         val user = "admin"

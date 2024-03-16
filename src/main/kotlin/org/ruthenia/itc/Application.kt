@@ -3,7 +3,7 @@ package org.ruthenia.itc
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.ruthenia.itc.dao.DatabaseSingleton
+import org.ruthenia.itc.dao.DatabaseSingleton.configureDatabase
 import org.ruthenia.itc.plugins.*
 
 fun main() {
@@ -12,7 +12,7 @@ fun main() {
 }
 
 fun Application.module() {
-    DatabaseSingleton.init()
+    configureDatabase()
     configureAdministration()
     configureSerialization()
     configureMonitoring()
