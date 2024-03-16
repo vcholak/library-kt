@@ -1,21 +1,25 @@
 package org.ruthenia.itc.dao
 
+import io.ktor.server.engine.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
+import io.github.cdimascio.dotenv.dotenv
 import org.ruthenia.itc.models.Authors
 import org.ruthenia.itc.models.BookInstances
 import org.ruthenia.itc.models.Books
 import org.ruthenia.itc.models.Genres
 
 object DatabaseSingleton {
+
+    val dotenv = dotenv()
     fun configureDatabase() {
         val driverClassName = "org.postgresql.Driver"
-        val jdbcURL = "jdbc:postgresql://localhost:5432/postgres"
-        val user = "admin"
-        val password = "adminpwd"
+        val jdbcURL = dotenv["DB_URL"]
+        val user = dotenv["DB_USER"]
+        val password = dotenv["DB_PASS"]
         val database = Database.connect(jdbcURL, driverClassName, user, password)
 
         transaction(database) {
