@@ -13,9 +13,7 @@ import org.ruthenia.itc.models.Genres
 
 object DatabaseSingleton {
 
-    val dotenv = dotenv {
-        filename = "env" // instead of.env
-    }
+    val dotenv = dotenv()
     fun configureDatabase() {
         val driverClassName = "org.postgresql.Driver"
         val jdbcURL = dotenv["DB_URL"]
