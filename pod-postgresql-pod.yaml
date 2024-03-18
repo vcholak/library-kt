@@ -1,0 +1,226 @@
+﻿kind: Pod
+apiVersion: v1
+metadata:
+  name: postgresql-pod
+  namespace: default
+  uid: 82e2e099-4786-4e79-ad90-c1da65cf4680
+  resourceVersion: '42615'
+  creationTimestamp: '2024-03-18T20:47:00Z'
+  labels:
+    app: postgresql-pod
+  annotations:
+    k8s.v1.cni.cncf.io/network-status: |-
+      [{
+          "name": "openshift-sdn",
+          "interface": "eth0",
+          "ips": [
+              "10.217.0.60"
+          ],
+          "default": true,
+          "dns": {}
+      }]
+  managedFields:
+    - manager: unknown
+      operation: Update
+      apiVersion: v1
+      time: '2024-03-18T20:47:00Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:app': {}
+        'f:spec':
+          'f:containers':
+            'k:{"name":"postgresql"}':
+              'f:tty': {}
+              'f:image': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:resources': {}
+              'f:args': {}
+              'f:env':
+                .: {}
+                'k:{"name":"POSTGRES_PASSWORD"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+                'k:{"name":"POSTGRES_USER"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+                'k:{"name":"TERM"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:ports':
+                .: {}
+                'k:{"containerPort":5432,"protocol":"TCP"}':
+                  .: {}
+                  'f:containerPort': {}
+                  'f:protocol': {}
+              'f:name': {}
+          'f:dnsPolicy': {}
+          'f:enableServiceLinks': {}
+          'f:restartPolicy': {}
+          'f:schedulerName': {}
+          'f:securityContext': {}
+          'f:terminationGracePeriodSeconds': {}
+    - manager: multus-daemon
+      operation: Update
+      apiVersion: v1
+      time: '2024-03-18T20:47:02Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:k8s.v1.cni.cncf.io/network-status': {}
+      subresource: status
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2024-03-18T20:47:22Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:conditions':
+            'k:{"type":"ContainersReady"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Initialized"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Ready"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+          'f:containerStatuses': {}
+          'f:hostIP': {}
+          'f:phase': {}
+          'f:podIP': {}
+          'f:podIPs':
+            .: {}
+            'k:{"ip":"10.217.0.60"}':
+              .: {}
+              'f:ip': {}
+          'f:startTime': {}
+      subresource: status
+spec:
+  restartPolicy: Always
+  serviceAccountName: default
+  imagePullSecrets:
+    - name: default-dockercfg-kzv2b
+  priority: 0
+  schedulerName: default-scheduler
+  enableServiceLinks: true
+  terminationGracePeriodSeconds: 30
+  preemptionPolicy: PreemptLowerPriority
+  nodeName: crc-b56wv-master-0
+  securityContext: {}
+  containers:
+    - resources: {}
+      terminationMessagePath: /dev/termination-log
+      name: postgresql
+      env:
+        - name: POSTGRES_PASSWORD
+          value: adminpwd
+        - name: POSTGRES_USER
+          value: admin
+        - name: TERM
+          value: xterm
+      ports:
+        - containerPort: 5432
+          protocol: TCP
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: kube-api-access-4xbrl
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePolicy: File
+      tty: true
+      image: 'docker.io/library/postgres:latest'
+      args:
+        - postgres
+  serviceAccount: default
+  volumes:
+    - name: kube-api-access-4xbrl
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+          - configMap:
+              name: openshift-service-ca.crt
+              items:
+                - key: service-ca.crt
+                  path: service-ca.crt
+        defaultMode: 420
+  dnsPolicy: ClusterFirst
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+status:
+  phase: Running
+  conditions:
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:47:00Z'
+    - type: Ready
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:47:22Z'
+    - type: ContainersReady
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:47:22Z'
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:47:00Z'
+  hostIP: 192.168.126.11
+  podIP: 10.217.0.60
+  podIPs:
+    - ip: 10.217.0.60
+  startTime: '2024-03-18T20:47:00Z'
+  containerStatuses:
+    - restartCount: 0
+      started: true
+      ready: true
+      name: postgresql
+      state:
+        running:
+          startedAt: '2024-03-18T20:47:22Z'
+      imageID: 'docker.io/library/postgres@sha256:6b841c8f6a819884207402f1209a8116844365df15fca8cf556fc54a24c70800'
+      image: 'docker.io/library/postgres:latest'
+      lastState: {}
+      containerID: 'cri-o://5083fde23555da257d80f33dd161b83e77c1ce587962f4acc7dcaaaa333184ed'
+  qosClass: BestEffort

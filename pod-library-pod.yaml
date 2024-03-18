@@ -1,0 +1,238 @@
+﻿kind: Pod
+apiVersion: v1
+metadata:
+  name: library-pod
+  namespace: default
+  uid: 74dc3e2c-a74e-47c5-80e3-6c3d8374693f
+  resourceVersion: '51778'
+  creationTimestamp: '2024-03-18T20:55:12Z'
+  labels:
+    app: library-pod
+  annotations:
+    k8s.v1.cni.cncf.io/network-status: |-
+      [{
+          "name": "openshift-sdn",
+          "interface": "eth0",
+          "ips": [
+              "10.217.0.65"
+          ],
+          "default": true,
+          "dns": {}
+      }]
+  managedFields:
+    - manager: unknown
+      operation: Update
+      apiVersion: v1
+      time: '2024-03-18T20:55:12Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:app': {}
+        'f:spec':
+          'f:containers':
+            'k:{"name":"library"}':
+              'f:tty': {}
+              'f:image': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:resources': {}
+              'f:stdin': {}
+              'f:env':
+                .: {}
+                'k:{"name":"DB_PASS"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+                'k:{"name":"DB_URL"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+                'k:{"name":"DB_USER"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+                'k:{"name":"TERM"}':
+                  .: {}
+                  'f:name': {}
+                  'f:value': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:ports':
+                .: {}
+                'k:{"containerPort":8080,"protocol":"TCP"}':
+                  .: {}
+                  'f:containerPort': {}
+                  'f:protocol': {}
+              'f:name': {}
+          'f:dnsPolicy': {}
+          'f:enableServiceLinks': {}
+          'f:restartPolicy': {}
+          'f:schedulerName': {}
+          'f:securityContext': {}
+          'f:terminationGracePeriodSeconds': {}
+    - manager: multus-daemon
+      operation: Update
+      apiVersion: v1
+      time: '2024-03-18T20:55:14Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:k8s.v1.cni.cncf.io/network-status': {}
+      subresource: status
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2024-03-18T22:00:12Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:conditions':
+            'k:{"type":"ContainersReady"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Initialized"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Ready"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+          'f:containerStatuses': {}
+          'f:hostIP': {}
+          'f:podIP': {}
+          'f:podIPs':
+            .: {}
+            'k:{"ip":"10.217.0.65"}':
+              .: {}
+              'f:ip': {}
+          'f:startTime': {}
+      subresource: status
+spec:
+  restartPolicy: Always
+  serviceAccountName: default
+  imagePullSecrets:
+    - name: default-dockercfg-kzv2b
+  priority: 0
+  schedulerName: default-scheduler
+  enableServiceLinks: true
+  terminationGracePeriodSeconds: 30
+  preemptionPolicy: PreemptLowerPriority
+  nodeName: crc-b56wv-master-0
+  securityContext: {}
+  containers:
+    - resources: {}
+      stdin: true
+      terminationMessagePath: /dev/termination-log
+      name: library
+      env:
+        - name: DB_PASS
+          value: adminpwd
+        - name: TERM
+          value: xterm
+        - name: DB_URL
+          value: 'jdbc:postgresql://localhost:5432/postgres'
+        - name: DB_USER
+          value: admin
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: kube-api-access-nb8nl
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePolicy: File
+      tty: true
+      image: 'localhost/ktor-docker-image:latest'
+  serviceAccount: default
+  volumes:
+    - name: kube-api-access-nb8nl
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+          - configMap:
+              name: openshift-service-ca.crt
+              items:
+                - key: service-ca.crt
+                  path: service-ca.crt
+        defaultMode: 420
+  dnsPolicy: ClusterFirst
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+status:
+  phase: Pending
+  conditions:
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:55:12Z'
+    - type: Ready
+      status: 'False'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:55:12Z'
+      reason: ContainersNotReady
+      message: 'containers with unready status: [library]'
+    - type: ContainersReady
+      status: 'False'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:55:12Z'
+      reason: ContainersNotReady
+      message: 'containers with unready status: [library]'
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2024-03-18T20:55:12Z'
+  hostIP: 192.168.126.11
+  podIP: 10.217.0.65
+  podIPs:
+    - ip: 10.217.0.65
+  startTime: '2024-03-18T20:55:12Z'
+  containerStatuses:
+    - name: library
+      state:
+        waiting:
+          reason: ImagePullBackOff
+          message: 'Back-off pulling image "localhost/ktor-docker-image:latest"'
+      lastState: {}
+      ready: false
+      restartCount: 0
+      image: 'localhost/ktor-docker-image:latest'
+      imageID: ''
+      started: false
+  qosClass: BestEffort
