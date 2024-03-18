@@ -1,12 +1,11 @@
 package org.ruthenia.itc.dao
 
-import io.ktor.server.engine.*
+import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-import io.github.cdimascio.dotenv.dotenv
 import org.ruthenia.itc.models.Authors
 import org.ruthenia.itc.models.BookInstances
 import org.ruthenia.itc.models.Books
@@ -14,7 +13,9 @@ import org.ruthenia.itc.models.Genres
 
 object DatabaseSingleton {
 
-    val dotenv = dotenv()
+    val dotenv = dotenv {
+        filename = "env" // instead of.env
+    }
     fun configureDatabase() {
         val driverClassName = "org.postgresql.Driver"
         val jdbcURL = dotenv["DB_URL"]
